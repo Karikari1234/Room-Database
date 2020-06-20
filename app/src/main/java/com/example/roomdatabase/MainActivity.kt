@@ -1,5 +1,6 @@
 package com.example.roomdatabase
 
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.roomdatabase.db.AppDatabase
@@ -16,22 +17,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         db = AppDatabase(applicationContext)
-        //coroutineScope {
-//            withContext(Dispatchers.IO){
-//                users = getAllUsers()
-//            }
-//        }
-//
-//        if (users.isNotEmpty()){
-//          username.text = users[0].firstName +" " + users[0].lastName
-//        }
-//        else{
-//           username.text = "user not found"
-//        }"
+        AsyncTask.execute{
+            users = db.userDao().getAll()
+            if (users.isNotEmpty()){
+                 username.text = users[0].firstName +" " + users[0].lastName
+            }
+            else{
+                username.text = "user not found"
+            }
+        }
     }
-//    private suspend fun getAllUsers():List<User>{
-//        return withContext(Dispatchers.IO){
-//            db.userDao().getAll()
-//        }
-//    }
+
 }
